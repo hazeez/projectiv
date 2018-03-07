@@ -1,0 +1,4 @@
+# the following files will be ignored when checking into github
+
+.idea
+__pycache__
