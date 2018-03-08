@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Speech Recognition Project</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <div class="container">
-        <!-- the parameters from server side are called in the client side using the below syntax -->
-      <h1>{{ message }}</h1>
-    </div>
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <!-- call the function here -->
-  </body>
-</html>
+{% extends "base.html" %}
+
+
+{% block content %}
+    <!-- if the message is 'Say something', it will be printed as is; else, will print that google senses this is what you told -->
+    {% if message!='Say something!' %}
+        <h1> Google senses this is what you told</h1>
+    {% endif %}
+    {% include "partials/message.html" %}
+{% endblock content %}
+
+
