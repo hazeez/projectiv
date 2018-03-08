@@ -26,14 +26,17 @@ def speech_to_text(value):
     #dummytext()
 
     if request.method == 'POST':
-        message = request.form['message']
+        status_message = request.form['message']
+        from_station = request.form['from_station']
+        to_station = request.form['to_station']
+        key_presses = request.form['key_presses']
         #value = request.form['value']
-        print (message, ' ' , value)
+        print (status_message)
+        print ('From station: ', from_station, ' ', 'To station: ', to_station)
 
     # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
     if (value == 1):
-    # Now get the user input
-        print ("I am executed")
+    # Now get the user input via the microphone
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, duration=1)
             audio = r.listen(source)
@@ -48,7 +51,7 @@ def speech_to_text(value):
                 #speak.tts(text, lang='en')
 
                 #return render_template('index.html', message=text)
-                return jsonify(message=text)
+                return jsonify(message=text, fromstation=from_station, tostation=to_station, key_presses=key_presses)
 
             except Exception as e:
                 return render_template('index.html', message='Something went wrong! ' + str(e))
