@@ -5,4 +5,5 @@ Version number      Description
 v1                  Initial version
 --------------------------------------------
 v2                  Based on the URL value 1 or 0, the microphone picks up the voice; before that the index page is loaded fully
---------------------------------------------:W
+--------------------------------------------
+
