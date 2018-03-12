@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "reservation_app/base.html" %}
 
 
 {% block content %}
@@ -6,7 +6,11 @@
     {% if message!='Say something!' %}
         <h1> Google senses this is what you told</h1>
     {% endif %}
-    {% include "partials/message.html" %}
+    {% include "reservation_app/partials/message.html" %}
 {% endblock content %}
+
+{% block scripts %}
+    <script src="../../static/js/script.js"></script>
+{% endblock scripts %}
 
 

@@ -1,5 +1,5 @@
 import speech_recognition as sr
-import speak
+from app.reservation_app import speak
 
 r = sr.Recognizer()
 
@@ -13,7 +13,7 @@ try:
     text = r.recognize_google(audio)
     print('Google thinks you said \n' + text)
     lang = 'en'
-    speak.tts(text,lang)
+    speak.tts(text, lang)
 
 
 except Exception as e:

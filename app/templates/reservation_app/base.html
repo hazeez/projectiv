@@ -4,6 +4,7 @@
     <title>Speech Recognition Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="../../static/css/customstyle.css">
      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   </head>
   <body>
@@ -11,13 +12,27 @@
         <!-- the parameters from server side are called in the client side using the below syntax -->
 
     <!-- custom block  that can be overriden in the child templates-->
-        {% block content%}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
 
+        {% block content%}
+            <h1>test</h1>
         {% endblock content %}
     </div>
 
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="../static/js/script.js"></script>
+    {% block scripts %}
+    {% endblock scripts %}
     <!-- call the function here -->
   </body>
 
