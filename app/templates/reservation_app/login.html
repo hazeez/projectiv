@@ -20,7 +20,8 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
+{#            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>#}
+            <p>{{ form.submit() }}</p>
         </form>
     </div>
 {% endblock %}

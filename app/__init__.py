@@ -22,7 +22,7 @@ db = SQLAlchemy(app)
 
 # instantiate the flask login manager
 login = LoginManager(app)
-login.login_view = 'reservation.login'
+login.login_view = 'login'
 
 
 # instantiate bootstrap

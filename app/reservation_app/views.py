@@ -29,9 +29,11 @@ r = sr.Recognizer()
 pyglet.options['audio'] = ['openal', 'pulse', 'silent']
 
 
-@reservation_app.route("/login/", methods=['GET','POST'] )
-# @reservation_app.route("/login/<int:value>",  defaults={'value':0})
-def login(value):
+# @reservation_app.route("/login", defaults={'value':0})
+@reservation_app.route("/login", methods=['GET','POST'])
+# @reservation_app.route("/login/<int:value>", methods=['GET','POST'])
+# def login(value):
+def login():
 
     # initiate the down key presses variable to 3 to keep the mic switched off
     # downkeypresses = 3
@@ -62,38 +64,50 @@ def login(value):
     #             #return jsonify(message="Please try again!" + str(e))
 
 
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('reservation.index'))
+    # form = LoginForm()
+    #
+    # if form.validate_on_submit():
+    #     username = form.username.data
+    #     password = form.password.data
+    #     username = username.lower()
+    #     password = password.lower()
+    #     try:
+    #         user = Users.query.filter_by(username=username).first()
+    #     # get user id, name and the password from the database
+    #
+    #         get_db_user_name = user.username
+    #         get_db_user_password = user.password
+    #         # validate both username and password matches with the db username and db password
+    #         if (username == get_db_user_name and password == get_db_user_password):
+    #             login_user(user, remember=None)
+    #             next_page = request.args.get('next')
+    #             print(next_page)
+    #             if not next_page or url_parse(next_page).netloc != '':
+    #                 next_page = url_for('reservation.index')
+    #             return redirect(next_page)
+    #             #return redirect(url_for('reservation.index'))
+    #         else:
+    #             flash('Invalid username or password')
+    #             return redirect(url_for('reservation.login'))
+    #     except AttributeError:
+    #         flash('Invalid username or password')
+    #
+    # return render_template('reservation_app/login.html',form=form)
+
     if current_user.is_authenticated:
-        return redirect(url_for('reservation.index'))
-    form = LoginForm()
-
+        return redirect(url_for('index'))
+    form = LoginForm(request.form)
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        username = username.lower()
-        password = password.lower()
-        try:
-            user = Users.query.filter_by(username=username).first()
-        # get user id, name and the password from the database
-
-            get_db_user_name = user.username
-            get_db_user_password = user.password
-            # validate both username and password matches with the db username and db password
-            if (username == get_db_user_name and password == get_db_user_password):
-                login_user(user)
-                next_page = request.args.get('next')
-                print(next_page)
-                if not next_page or url_parse(next_page).netloc != '':
-                    next_page = url_for('reservation.index')
-                return redirect(next_page)
-                #return redirect(url_for('reservation.index'))
-            else:
-                flash('Invalid username or password')
-                return redirect(url_for('reservation.login'))
-        except AttributeError:
+        user = Users.query.filter_by(username=form.username.data).first()
+        password = user.password
+        if user is None or password is None:
             flash('Invalid username or password')
-
-    return render_template('reservation_app/login.html',form=form)
-
+            return redirect(url_for('login'))
+        login_user(user, remember=None)
+        return redirect(url_for('index'))
+    return render_template('reservation_app/login.html', title='Sign In', form=form)
 
 
 @reservation_app.route("/index", defaults={'value':0})
