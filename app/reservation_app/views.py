@@ -2,7 +2,7 @@
 
 from flask import request, jsonify, render_template, Blueprint, flash, g, session, redirect, url_for
 import speech_recognition as sr
-from flask_login import login_required, current_user, login_user
+from flask_login import login_required, current_user, login_user, logout_user
 from flask_migrate import Migrate
 import pyglet, os
 from app import app, db, login
@@ -20,8 +20,6 @@ reservation_app = Blueprint('reservation', __name__, url_prefix='/reservation')
 # Flask migrate will help to update the db as and when it is needed without the data being lost
 migrate = Migrate(app, db)
 
-# if an user is not authenticated, then login page should be shown
-login.login_view = 'reservation.login'
 
 #instantiate the recognizer
 r = sr.Recognizer()
@@ -31,37 +29,37 @@ r = sr.Recognizer()
 pyglet.options['audio'] = ['openal', 'pulse', 'silent']
 
 
-@reservation_app.route("/login/", defaults={'value':0})
-@reservation_app.route("/login/<int:value>", methods=['GET','POST'] )
+@reservation_app.route("/login/", methods=['GET','POST'] )
+# @reservation_app.route("/login/<int:value>",  defaults={'value':0})
 def login(value):
 
     # initiate the down key presses variable to 3 to keep the mic switched off
-    downkeypresses = 3
-
-    if request.method == 'POST':
-        print("I am here")
-        mic_status = request.form['message']
-        downkeypresses = int(request.form['downkeypresses'])
-        print(mic_status)
-
-    print("Downkeypresses :", downkeypresses)
-
-    # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
-    # if the down key is pressed for more than 2 times, the mic should not be switched on
-    if (value == 1 and downkeypresses <=2):
-        print("I am inside the mic construct")
-        # Now get the user input via the microphone
-        with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, duration=1)
-            audio = r.listen(source)
-            print(audio)
-            try:
-                text = r.recognize_google(audio)
-                print(text)
-                return jsonify(message=text, downkeypresses=downkeypresses)
-            except Exception as e:
-                return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
-                #return jsonify(message="Please try again!" + str(e))
+    # downkeypresses = 3
+    #
+    # if request.method == 'POST':
+    #     print("I am here")
+    #     mic_status = request.form['message']
+    #     downkeypresses = int(request.form['downkeypresses'])
+    #     print(mic_status)
+    #
+    # print("Downkeypresses :", downkeypresses)
+    #
+    # # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
+    # # if the down key is pressed for more than 2 times, the mic should not be switched on
+    # if (value == 1 and downkeypresses <=2):
+    #     print("I am inside the mic construct")
+    #     # Now get the user input via the microphone
+    #     with sr.Microphone() as source:
+    #         r.adjust_for_ambient_noise(source, duration=1)
+    #         audio = r.listen(source)
+    #         print(audio)
+    #         try:
+    #             text = r.recognize_google(audio)
+    #             print(text)
+    #             return jsonify(message=text, downkeypresses=downkeypresses)
+    #         except Exception as e:
+    #             return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
+    #             #return jsonify(message="Please try again!" + str(e))
 
 
     if current_user.is_authenticated:
@@ -71,6 +69,8 @@ def login(value):
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
+        username = username.lower()
+        password = password.lower()
         try:
             user = Users.query.filter_by(username=username).first()
         # get user id, name and the password from the database
@@ -79,12 +79,16 @@ def login(value):
             get_db_user_password = user.password
             # validate both username and password matches with the db username and db password
             if (username == get_db_user_name and password == get_db_user_password):
+                login_user(user)
                 next_page = request.args.get('next')
                 print(next_page)
-                #return redirect(next_page)
-                return redirect(url_for('reservation.index'))
+                if not next_page or url_parse(next_page).netloc != '':
+                    next_page = url_for('reservation.index')
+                return redirect(next_page)
+                #return redirect(url_for('reservation.index'))
             else:
                 flash('Invalid username or password')
+                return redirect(url_for('reservation.login'))
         except AttributeError:
             flash('Invalid username or password')
 
@@ -92,9 +96,9 @@ def login(value):
 
 
 
-@reservation_app.route("/", defaults={'value':0})
-@reservation_app.route("/<int:value>", methods=['GET','POST'])
-#@login_required
+@reservation_app.route("/index", defaults={'value':0})
+@reservation_app.route("/index/<int:value>", methods=['GET','POST'])
+@login_required
 def index(value):
 
     # This function displays an .html page when the application starts
@@ -127,5 +131,9 @@ def index(value):
 
             # speak.tts(text, lang)
     else:
-        return render_template('reservation_app/index.html', message='Say something!')
+        return render_template("/reservation_app/index.html", message='Say something!')
 
+@reservation_app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('reservation.login'))
