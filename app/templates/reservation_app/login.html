@@ -4,7 +4,13 @@
     <style>#login-div{margin-top: 200px}</style>
     <div class="main-container col-md-offset-4 col-md-4" id="login-div">
         <h1>Sign In</h1>
-        <form action="">
+        <form action="" method="post">
+
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
+
+
             {{  form.hidden_tag() }}
             <p>
                 {{ form.username.label }}<br>
@@ -20,8 +26,7 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-{#            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>#}
-            <p>{{ form.submit() }}</p>
+            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
         </form>
     </div>
 {% endblock %}

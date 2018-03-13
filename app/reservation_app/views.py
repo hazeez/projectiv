@@ -95,18 +95,18 @@ def login():
     #         flash('Invalid username or password')
     #
     # return render_template('reservation_app/login.html',form=form)
-
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('reservation.index'))
     form = LoginForm(request.form)
+    flash(form.errors)
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
         password = user.password
         if user is None or password is None:
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('reservation.login'))
         login_user(user, remember=None)
-        return redirect(url_for('index'))
+        return redirect(url_for('reservation.index'))
     return render_template('reservation_app/login.html', title='Sign In', form=form)
 
 

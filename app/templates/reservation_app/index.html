@@ -2,6 +2,7 @@
 
 
 {% block content %}
+    <h1> Hi, {{ current_user }}</h1>
     <!-- if the message is 'Say something', it will be printed as is; else, will print that google senses this is what you told -->
     {% if message!='Say something!' %}
         <h1> Google senses this is what you told</h1>
