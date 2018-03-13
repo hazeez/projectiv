@@ -31,11 +31,44 @@ r = sr.Recognizer()
 pyglet.options['audio'] = ['openal', 'pulse', 'silent']
 
 
-@reservation_app.route("/login", methods=['GET','POST'])
-def login():
+@reservation_app.route("/login/", defaults={'value':0})
+@reservation_app.route("/login/<int:value>", methods=['GET','POST'] )
+def login(value):
+
+    if request.method == 'POST':
+        mic_status = request.form['message']
+        print(mic_status)
+
+    # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
+    if (value == 1):
+        # Now get the user input via the microphone
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration=1)
+            audio = r.listen(source)
+            try:
+                text = r.recognize_google(audio)
+                print(text)
+                return jsonify(message=text)
+            except Exception as e:
+                return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
+
+    if (value == 2):
+        # Now get the user input via the microphone
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration=1)
+            audio = r.listen(source)
+            try:
+                text = r.recognize_google(audio)
+                print(text)
+                return jsonify(message=text)
+            except Exception as e:
+                return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
+
+
     if current_user.is_authenticated:
         return redirect(url_for('reservation.index'))
     form = LoginForm()
+
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -88,13 +121,6 @@ def index(value):
             try:
                 text = r.recognize_google(audio)
                 print(text)
-                #pathname = speak.tts(text, lang='en')
-                #print(pathname)
-                #play the audio file
-                #play_audio_file(pathname)
-                #speak.tts(text, lang='en')
-
-                #return render_template('index.html', message=text)
                 return jsonify(message=text, fromstation=from_station, tostation=to_station, key_presses=key_presses)
 
             except Exception as e:

@@ -13,7 +13,7 @@ DATABASE_CONNECT_OPTIONS = {}
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 #Enable protection against CSRF
-CSRF_ENABLED = True
+CSRF_ENABLED = False
 
 #Use a secure, unique and absolutely secret for signing the data
 CSRF_SESSION_KEY = "secret"

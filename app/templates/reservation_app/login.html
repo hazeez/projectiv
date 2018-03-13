@@ -5,10 +5,10 @@
     <div class="main-container col-md-offset-4 col-md-4" id="login-div">
         <h1>Sign In</h1>
         <form action="" method="post">
-            {{ form.hidden_tag() }}
+            {{  form.hidden_tag() }}
             <p>
                 {{ form.username.label }}<br>
-                {{ form.username(size=32, **{'class':'form-control form-control-lg', 'audio':'username.wav', 'speech':'yes'}) }}
+                {{ form.username(size=32, **{'class':'form-control form-control-lg', 'audio':'username.wav', 'speech':'yes', 'autofocus':'autofocus'}) }}
                 {% for error in form.username.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
