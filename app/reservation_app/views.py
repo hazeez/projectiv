@@ -35,34 +35,33 @@ pyglet.options['audio'] = ['openal', 'pulse', 'silent']
 @reservation_app.route("/login/<int:value>", methods=['GET','POST'] )
 def login(value):
 
+    # initiate the down key presses variable to 3 to keep the mic switched off
+    downkeypresses = 3
+
     if request.method == 'POST':
+        print("I am here")
         mic_status = request.form['message']
+        downkeypresses = int(request.form['downkeypresses'])
         print(mic_status)
 
-    # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
-    if (value == 1):
-        # Now get the user input via the microphone
-        with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, duration=1)
-            audio = r.listen(source)
-            try:
-                text = r.recognize_google(audio)
-                print(text)
-                return jsonify(message=text)
-            except Exception as e:
-                return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
+    print("Downkeypresses :", downkeypresses)
 
-    if (value == 2):
+    # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
+    # if the down key is pressed for more than 2 times, the mic should not be switched on
+    if (value == 1 and downkeypresses <=2):
+        print("I am inside the mic construct")
         # Now get the user input via the microphone
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, duration=1)
             audio = r.listen(source)
+            print(audio)
             try:
                 text = r.recognize_google(audio)
                 print(text)
-                return jsonify(message=text)
+                return jsonify(message=text, downkeypresses=downkeypresses)
             except Exception as e:
                 return render_template('reservation_app/login.html', message='Please try again! ' + str(e))
+                #return jsonify(message="Please try again!" + str(e))
 
 
     if current_user.is_authenticated:

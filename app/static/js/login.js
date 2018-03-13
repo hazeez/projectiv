@@ -27,8 +27,10 @@ function fnplayaudio(audio_path){
 
         $('input').keydown(function(e) {
     if (e.keyCode==40) {
+
         e.preventDefault();
         down_key_presses += 1;
+
         var password_value = $("#password").val();
         var username_value = $("#username").val();
 
@@ -37,27 +39,35 @@ function fnplayaudio(audio_path){
             if (!username_value) {
                 fnplayaudio("../../static/audio/username_audio.wav");
             }
+        }
 
-            // send a post request to the backend indicating the server to switch on the mic
-            $.post("/reservation/login/1",
-                {
-                    message: "mic is on"
-                }, function(data){
+
+        // send a post request to the backend indicating the server to switch on the mic
+        $.post("/reservation/login/1",
+            {
+                message: "mic is on",
+                downkeypresses: down_key_presses,
+                username: username_value,
+                password: password_value
+            }, function(data){
+                if (data.downkeypresses == 1){
                     $("#username").val(data.message);
-                });
+                    $("#password").focus()
+                    if (!password_value) {
+                        fnplayaudio("../../static/audio/pressing_downkey_password_audio.wav");
+                    }
+                }
+                if (data.downkeypresses == 2){
+                    console.log("password response is :" + data.message)
+                    $("#password").val(data.message);
+                    fnplayaudio("../../static/audio/login_submit_downkey_audio.wav")
+                }
+            });
 
-        }
-
-        if (down_key_presses == 2) {
-            $("#password").focus();
-            if (!password_value) {
-                fnplayaudio("../../static/audio/password_audio.wav");
-            }
-        }
 
         if(down_key_presses == 3){
             $("#submit").focus();
-            fnplayaudio("../../static/audio/login_submit_downkey_audio.wav")
+           // fnplayaudio("../../static/audio/login_submit_downkey_audio.wav")
         }
         console.log("password given is: " + password_value);
         console.log("username give is : " + username_value);
