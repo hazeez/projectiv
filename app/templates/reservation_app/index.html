@@ -1,17 +1,39 @@
 {% extends "reservation_app/base.html" %}
 
-
 {% block content %}
-    <h1> Hi, {{ current_user.username }}</h1>
-    <!-- if the message is 'Say something', it will be printed as is; else, will print that google senses this is what you told -->
-    {% if message!='Say something!' %}
-        <h1> Google senses this is what you told</h1>
-    {% endif %}
-    {% include "reservation_app/partials/message.html" %}
-{% endblock content %}
+
+    {% include "reservation_app/partials/navbar.html" %}
+    <style>#login-div{margin-top: 50px}</style>
+    <div class="main-container col-md-3" id="booking-div">
+        <h1>Journey Details</h1>
+        <form action="" method="post">
+
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
+
+
+            {{  form.hidden_tag() }}
+            <p>
+                {{ form.fromstation.label }}<br>
+                {{ form.fromstation(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please say your Source Station', 'speech-set-text':'source station provided is'}) }}
+                {% for error in form.fromstation.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.tostation.label }}<br>
+                {{ form.tostation(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please say your Destination station', 'speech-set-text':'destination station is'}) }}
+                {% for error in form.tostation.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
+        </form>
+    </div>
+{% endblock %}
+
 
 {% block scripts %}
-    <script src="../../static/js/script.js"></script>
+    <script src="../../static/js/index.js"></script>
 {% endblock scripts %}
-
-

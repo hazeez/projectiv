@@ -54,12 +54,12 @@
       console.log(transcript);
 
       if (down_key_presses == 1){
-          $("#username").val(transcript);
+          $("#fromstation").val(transcript);
           readOutLoud('Thank you. Press down arrow key to proceed');
       }
 
       if (down_key_presses == 2){
-          $("#password").val(transcript);
+          $("#tostation").val(transcript);
           readOutLoud('Thank you. Press down arrow key to proceed');
       }
       //return transcript;
@@ -107,14 +107,14 @@
         // set time out will hold the message to be played for three seconds before playing it. a value of 3000 indicates three seconds
         setTimeout(function(){
             // fnplayaudio("../../static/audio/welcome_audio.wav");
-            readOutLoud('Welcome to the reservation portal');
+            readOutLoud('you are successfully logged in');
         }, 2000);
 
         // $("#username").focus();
 
         setTimeout(function(){
             // fnplayaudio("../../static/audio/provide_login_credentials_audio.wav");
-            readOutLoud('Please provide your login credentials');
+            readOutLoud('Please provide your source and destination stations');
         }, 7000);
 
         setTimeout(function(){
@@ -132,16 +132,16 @@
         console.log('down key pressed : ' + down_key_presses);
         console.log('down key press mod : ' + down_key_presses_mod);
 
-        var password_value = $("#password").val();
-        var username_value = $("#username").val();
+        var tostation_value = $("#tostation").val();
+        var fromstation_value = $("#fromstation").val();
 
         down_key_presses_mod = down_key_presses % 3;
 
         if (down_key_presses_mod == 1) {
-            $("#username").focus();
-              if (!username_value) {
-                var username_speech_text = $("#username").attr("speech-unset-text") + " " + "after the beep";
-                readOutLoud(username_speech_text);
+            $("#fromstation").focus();
+              if (!fromstation_value) {
+                var fromstation_speech_text = $("#fromstation").attr("speech-unset-text") + " " + "after the beep";
+                readOutLoud(fromstation_speech_text);
                 setTimeout(function(){
                     recognition.start();
                     playbeepsound();
@@ -149,16 +149,16 @@
                 },3000);
             }
             else{
-                var username_speech_text = $("#username").attr("speech-set-text") + ' ' + $("#username").val();
-                readOutLoud(username_speech_text);
+                var fromstation_speech_text = $("#fromstation").attr("speech-set-text") + ' ' + $("#fromstation").val();
+                readOutLoud(fromstation_speech_text);
               }
         } // end of if down_key_presses
 
         if (down_key_presses_mod == 2) {
-            $("#password").focus();
-              if (!password_value) {
-                var password_speech_text = $("#password").attr("speech-unset-text") + " " + "after the beep";
-                readOutLoud(password_speech_text);
+            $("#tostation").focus();
+              if (!tostation_value) {
+                var tostation_speech_text = $("#tostation").attr("speech-unset-text") + " " + "after the beep";
+                readOutLoud(tostation_speech_text);
                 setTimeout(function(){
                     recognition.start();
                     playbeepsound();
@@ -166,29 +166,13 @@
                 },3000);
             }
             else{
-                var username_speech_text = "Password is provided";
-                readOutLoud(username_speech_text);
+                var tostation_speech_text = $("#tostation").attr("speech-set-text") + ' ' + $("#tostation").val();
+                readOutLoud(tostation_speech_text);
               }
         } // end of if down_key_presses = 2
 
-        if (down_key_presses_mod == 3) {
-            $("#password").focus();
-              if (!password_value) {
-                var password_speech_text = $("#password").attr("speech-unset-text");
-                readOutLoud(password_speech_text);
-                setTimeout(function(){
-                    recognition.start();
-                    console.log("speech recognition started");
-                },2000);
-            }
-            else{
-                var password_speech_text = "Password is set";
-                readOutLoud(password_speech_text);
-              }
-        } // end of if down_key_presses = 2
-
-        console.log("password given is: " + password_value);
-        console.log("username given is : " + username_value);
+        console.log("from station given is: " + fromstation_value);
+        console.log("to station given is : " + tostation_value);
         console.log('down_key_pressed:' + down_key_presses);
     }
 

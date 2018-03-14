@@ -9,7 +9,7 @@ from app import app, db, login
 
 
 #import module forms
-from app.reservation_app.forms import LoginForm
+from app.reservation_app.forms import LoginForm, StationsForm
 
 #import models
 from app.reservation_app.models import Users
@@ -69,38 +69,35 @@ def login():
 @login_required
 def index(value):
 
-    # This function displays an .html page when the application starts
-    # When the user speaks, the speech is converted into text and then displayed in the browser
+    form = StationsForm(request.form)
 
+    if form.validate_on_submit():
+        fromstation = form.fromstation.data
+        tostation = form.tostation.data
+        fromstation = fromstation.lower()
+        tostation = tostation.lower()
 
-    if request.method == 'POST':
-        status_message = request.form['message']
-        from_station = request.form['from_station']
-        to_station = request.form['to_station']
-        key_presses = request.form['key_presses']
-        #value = request.form['value']
+        if fromstation is None or tostation is None:
+            flash('Please provide From station and To station')
+            return redirect(url_for('reservation.index'))
 
-        print (status_message)
-        print ('From station: ', from_station, ' ', 'To station: ', to_station)
+        try:
+            train = Trains.query.filter_by(fromstation=fromstation,tostation=tostation).first()
 
-    # Value = 1 is when the microphone will switch on else, it will return the standard text which is 'Say something'
-    if (value == 1):
-    # Now get the user input via the microphone
-        with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, duration=1)
-            audio = r.listen(source)
+        # get from station, and the to station from the database
 
-            try:
-                text = r.recognize_google(audio)
-                print(text)
-                return jsonify(message=text, fromstation=from_station, tostation=to_station, key_presses=key_presses)
+            get_db_from_station = train.fromstation
+            get_db_to_station = train.tostation
+            # validate both fromstation and tostation matches with the db username and db password
+            if (fromstation == get_db_from_station and tostation == get_db_to_station):
+                pass
+            else:
+                flash('No trains exists between from and to stations')
+                pass
+        except AttributeError:
+            flash('No train information exists')
+    return render_template('reservation_app/index.html',form=form)
 
-            except Exception as e:
-                return render_template('reservation_app/index.html', message='Something went wrong! ' + str(e))
-
-            # speak.tts(text, lang)
-    else:
-        return render_template("/reservation_app/index.html", message='Say something!')
 
 @reservation_app.route('/logout')
 def logout():

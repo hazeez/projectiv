@@ -20,3 +20,49 @@ class Users(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return Users.query.get(int(id))
+
+class Trains(db.Model):
+    __tablename__ = 'trains'
+    id = db.Column(db.Integer, primary_key=True)
+    trainnumber = db.Column(db.Integer)
+    trainname = db.Column(db.String(64))
+    availablity = db.Column(db.String(64))
+    fromstation = db.Column(db.String(64))
+    tostation = db.Column(db.String(64))
+
+# new instance instantiation procedure
+    def __init__(self, id,trainnumber,trainname,availablity,fromstation,tostation):
+        self.id = id
+        self.trainnumber = trainnumber
+        self.trainname = trainname
+        self.availablity = availablity
+        self.fromstation = fromstation
+        self.tostation = tostation
+
+#this function will provide the serial number,train name,train name, and availblity when the table trains is queried
+    def __repr__(self):
+
+        return '<train_name {}>'.format(self.trainname)
+
+
+class Passengers(db.Model):
+    __tablename__ = 'passengers'
+    id = db.Column(db.Integer, primary_key=True)
+    passengername = db.Column(db.String(64))
+    passengerage = db.Column(db.Integer)
+    passengersex = db.Column(db.String(64))
+    passengerpreference = db.Column(db.String(64))
+
+# new instance instantiation procedure
+    def __init__(self, id,trainnumber,trainname,availablity,fromstation,tostation):
+        self.id = id
+        self.passengername = passengername
+        self.passengerage = passengerage
+        self.passengersex = passengersex
+        self.passengerpreference = passengerpreference
+
+
+#this function will provide the serial number,train name,train name, and availblity when the table trains is queried
+    def __repr__(self):
+
+        return '<passenger_name {}>'.format(self.passengername)

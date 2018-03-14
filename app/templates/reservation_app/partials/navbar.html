@@ -1,0 +1,26 @@
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">RSVC App</a>
+   <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+
+      </li>
+      <li class="nav-item">
+
+      </li>
+      <li class="nav-item">
+
+      </li>
+    </ul>
+    <span class="navbar-text" style="color:white;">
+      User Logged In : {{ current_user.username }}
+    </span>
+       <span class="navbar-text">
+      <a class="nav-link" href="/reservation/logout">Logout</a>
+    </span>
+
+  </div>
+</nav>
+
+{% endblock navbar %}

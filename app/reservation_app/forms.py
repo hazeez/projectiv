@@ -14,3 +14,10 @@ class LoginForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign In')
 
+
+# Define the stations form
+
+class StationsForm(Form):
+    fromstation = StringField('From Station', validators=[DataRequired()])
+    tostation = StringField('To Station', validators=[DataRequired()])
+    submit = SubmitField('Submit')
