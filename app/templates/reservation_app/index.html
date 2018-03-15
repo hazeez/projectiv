@@ -6,14 +6,15 @@
     <style>#login-div{margin-top: 50px}</style>
     <div class="main-container col-md-3" id="booking-div">
         <h1>Journey Details</h1>
-        <form action="" method="post">
+        <form action="" method="post" id="form-journey">
 
             {% if form.errors %}
                 {{ form.errors }}
             {% endif %}
 
 
-            {{  form.hidden_tag() }}
+{#            {{  form.hidden_tag() }}#}
+            {{ form.csrf_token }}
             <p>
                 {{ form.fromstation.label }}<br>
                 {{ form.fromstation(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please say your Source Station', 'speech-set-text':'source station provided is'}) }}
@@ -28,7 +29,7 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
+            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary','id':'btn-submit'}) }}</p>
         </form>
     </div>
 {% endblock %}

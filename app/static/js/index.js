@@ -177,9 +177,64 @@
     }
 
 
-});
 
-});
+    // $("#btn-submit").click(function(){
+    //    // alert("Clicked Submit");
+    //     var tostation_value = $("#tostation").val();
+    //     var fromstation_value = $("#fromstation").val();
+    //     $.post('/reservation/index',
+    //         {
+    //             fromstation:fromstation_value,
+    //             tostation:tostation_value
+    //         },
+    //         function(data){
+    //             console.log(data.message);
+    //         });
+    //     return false;
+    // });
+
+        //     $('#btn-submit').on('click',function(e){
+        // e.preventDefault();
+        // var tostation_value = $("#tostation").val();
+        // var fromstation_value = $("#fromstation").val();
+        //
+        //
+        // $.ajax({
+        //         url: "/reservation/index",
+        //         method: "POST",
+        //         data: {
+        //             fromstation:fromstation_value,
+        //             tostation:tostation_value
+        //         },
+        //         success: function(data) {
+        //             console.log(data);
+        //         }
+        // }); // end of ajax
+
+
+
+
+}); // end of body key down function
+
+
+        $('#form-journey').on('submit',function(e){
+        e.preventDefault();
+        // var tostation_value = $("#tostation").val();
+        // var fromstation_value = $("#fromstation").val();
+        frm_serialized = $(this).serialize();
+
+        $.ajax({
+                url: "/reservation/index",
+                method: "POST",
+                data : frm_serialized,
+                success: function(data) {
+                    console.log(data);
+                }
+        }); // end of ajax
+
+   }); // end of btn submit
+
+}); // end of document ready
 
 
 
