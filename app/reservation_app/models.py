@@ -39,9 +39,14 @@ class Trains(db.Model):
         self.fromstation = fromstation
         self.tostation = tostation
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return dict(id=self.id, trainnumber=self.trainnumber, trainname=self.trainname, availability=self.availablity,
+                    fromstation=self.fromstation, tostation=self.tostation)
+
 #this function will provide the serial number,train name,train name, and availblity when the table trains is queried
     def __repr__(self):
-
         return '<train_name {}>'.format(self.trainname)
 
 

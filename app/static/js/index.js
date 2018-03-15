@@ -217,19 +217,49 @@
 }); // end of body key down function
 
 
+        var table_element = "";
+
         $('#form-journey').on('submit',function(e){
         e.preventDefault();
         // var tostation_value = $("#tostation").val();
         // var fromstation_value = $("#fromstation").val();
         frm_serialized = $(this).serialize();
 
+
         $.ajax({
                 url: "/reservation/index",
                 method: "POST",
                 data : frm_serialized,
                 success: function(data) {
-                    console.log(data);
-                }
+                    table_element = "<table class='table table-striped'>" +
+                        "<thead><tr>" +
+                          "<th scope='col'>S.No</th>" +
+                          "<th scope='col'>Train Number</th>" +
+                          "<th scope='col'>Train Name</th>" +
+                          "<th scope='col'>Availability</th>" +
+                          "<th scope='col'>From Station</th>" +
+                          "<th scope='col'>From Station</th>" +
+                            "<th scope='col'>Action</th>" +
+                        "</tr>" +
+                        "</thead>" +
+                        "<tbody>";
+
+
+                    for (var i=0;i<data.trains.length; i++){
+                        var j = i+1;
+                    table_element += "<tr> <th scope='row'>" + j + "</th>" +
+                        "<td>" + data.trains[i].trainnumber + "</td>" +
+                        "<td>" + data.trains[i].trainname + "</td>" +
+                        "<td>" + data.trains[i].availability + "</td>" +
+                        "<td>" + data.trains[i].fromstation + "</td>" +
+                        "<td>" + data.trains[i].tostation + "</td>" +
+                        "<td> <input class='btn btn-primary' id='"+ data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='"+ data.trains[i].availability +"'> </td></tr>";
+                    }
+                    table_element += "</tbody></table>";
+                    // noinspection JSAnnotator
+                    document.getElementById("train-details-div").innerHTML = table_element;
+
+                } // success function ends here
         }); // end of ajax
 
    }); // end of btn submit

@@ -3,7 +3,8 @@
 {% block content %}
 
     {% include "reservation_app/partials/navbar.html" %}
-    <style>#login-div{margin-top: 50px}</style>
+    <style>#booking-div, #train-details-div{margin-top: 20px}</style>
+
     <div class="main-container col-md-3" id="booking-div">
         <h1>Journey Details</h1>
         <form action="" method="post" id="form-journey">
@@ -31,7 +32,12 @@
             </p>
             <p>{{ form.submit(**{'class':'btn btn-lg btn-primary','id':'btn-submit'}) }}</p>
         </form>
+    </div> <!-- end of div.main-container -->
+
+    <div class="main-container col-md-9" id="train-details-div">
+
     </div>
+
 {% endblock %}
 
 

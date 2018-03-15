@@ -77,51 +77,59 @@ def index():
             fromstation = request.form['fromstation']
             tostation = request.form['tostation']
             print('from station :', fromstation, 'to station :', tostation)
-            try:
-                # trains = Trains.query.filter_by(fromstation=form.fromstation.data,tostation=form.tostation.data)
-                trains = Trains.query.filter_by(fromstation=fromstation,tostation=tostation)
-                for train in trains:
-                    print(train.trainname)
-                # print(trains, type(trains))
-                # return jsonify(data=trains.trainname)
-                return jsonify(message='success')
-            except:
-                flash_message = 'No trains between ', fromstation ,' and ', tostation
-                flash(flash_message)
+            # try:
+            trains = Trains.query.filter_by(fromstation=fromstation,tostation=tostation)
+            print("I am here")
+            for train in trains:
+                print(train.trainname)
+            print(type(trains))
+            # print(trains, type(trains))
+            # return jsonify(data=trains)
+            # return jsonify(list(map(lambda x: x.to_dict(), trains )))
+            # return jsonify(trains=trains.all())
+            return jsonify(trains=[i.serialize for i in trains.all()])
+            # return jsonify(trains=trains)
+            # return trains
+            # except e:
+            #     print(str(e))
+            #     flash_message = 'No trains between ', fromstation ,' and ', tostation
+            #     flash(flash_message)
     except AttributeError:
         flash('No train information exists')
 
 
-    if form.validate_on_submit():
-        fromstation = form.fromstation.data
-        tostation = form.tostation.data
-        fromstation = fromstation.lower()
-        tostation = tostation.lower()
-
-
-
-        if fromstation is None or tostation is None:
-            flash('Please provide From station and To station')
-            return redirect(url_for('reservation.index'))
-
-        try:
-            if request.method == 'POST':
-                fromstation = request.form['fromstation']
-                tostation = request.form['tostation']
-                print('from station :', fromstation, 'to station :', tostation)
-                try:
-                    # trains = Trains.query.filter_by(fromstation=form.fromstation.data,tostation=form.tostation.data)
-                    trains = Trains.query.filter_by(fromstation=fromstation,tostation=tostation)
-                    # for train in trains:
-                    #     print(train.trainname)
-                    # print(trains, type(trains))
-                    # return jsonify(data=trains.trainname)
-                    return jsonify(message=trains)
-                except:
-                    flash_message = 'No trains between ', fromstation ,' and ', tostation
-                    flash(flash_message)
-        except AttributeError:
-            flash('No train information exists')
+    # if form.validate_on_submit():
+    #     fromstation = form.fromstation.data
+    #     tostation = form.tostation.data
+    #     fromstation = fromstation.lower()
+    #     tostation = tostation.lower()
+    #
+    #
+    #
+    #     if fromstation is None or tostation is None:
+    #         flash('Please provide From station and To station')
+    #         return redirect(url_for('reservation.index'))
+    #
+    #     try:
+    #         if request.method == 'POST':
+    #             fromstation = request.form['fromstation']
+    #             tostation = request.form['tostation']
+    #             print('from station :', fromstation, 'to station :', tostation)
+    #             try:
+    #                 # trains = Trains.query.filter_by(fromstation=form.fromstation.data,tostation=form.tostation.data)
+    #                 trains = Trains.query.filter_by(fromstation=fromstation,tostation=tostation)
+    #                 print("I am here")
+    #                 # for train in trains:
+    #                 #     print(train.trainname)
+    #                 # print(trains, type(trains))
+    #                 # return jsonify(data=trains.trainname)
+    #                 return render_template('reservation_app/index.html', trains=trains)
+    #                 # return jsonify(message=trains)
+    #             except:
+    #                 flash_message = 'No trains between ', fromstation ,' and ', tostation
+    #                 flash(flash_message)
+    #     except AttributeError:
+    #         flash('No train information exists')
     return render_template('reservation_app/index.html',form=form)
 
 
