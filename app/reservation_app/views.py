@@ -5,14 +5,14 @@ import speech_recognition as sr
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_migrate import Migrate
 import pyglet, os
-from app import app, db, login
+from app import app, db
 
 
 #import module forms
 from app.reservation_app.forms import LoginForm, StationsForm, PassengerForm
 
 #import models
-from app.reservation_app.models import Users
+from app.reservation_app.models import Users, Trains
 
 #Define the blueprint
 reservation_app = Blueprint('reservation', __name__, url_prefix='/reservation')
@@ -35,7 +35,7 @@ def login():
 
     if current_user.is_authenticated:
         return redirect(url_for('reservation.index'))
-    form = LoginForm(request.form)
+    form = LoginForm()
 
     if form.validate_on_submit():
         username = form.username.data
@@ -65,46 +65,30 @@ def login():
     return render_template('reservation_app/login.html',form=form)
 
 
-@reservation_app.route("/index", defaults={'value':0})
-@reservation_app.route("/index/<int:value>", methods=['GET','POST'])
+@reservation_app.route("/index", methods=['GET','POST'])
 @login_required
-def index(value):
+def index():
 
-    form = StationsForm(request.form)
+    form = StationsForm()
 
-    if form.validate_on_submit():
-        fromstation = form.fromstation.data
-        tostation = form.tostation.data
-        fromstation = fromstation.lower()
-        tostation = tostation.lower()
+    try:
+        if request.method == 'POST':
+            fromstation = request.form['fromstation']
+            tostation = request.form['tostation']
+            print('from station :', fromstation, 'to station :', tostation)
+            trains = Trains.query.filter_by(fromstation=fromstation,tostation=tostation)
+            return jsonify(trains=[i.serialize for i in trains.all()])
+    except AttributeError:
+        flash('No train information exists')
 
-        if fromstation is None or tostation is None:
-            flash('Please provide From station and To station')
-            return redirect(url_for('reservation.index'))
-
-        try:
-            train = Trains.query.filter_by(fromstation=fromstation,tostation=tostation).first()
-
-        # get from station, and the to station from the database
-
-            get_db_from_station = train.fromstation
-            get_db_to_station = train.tostation
-            # validate both fromstation and tostation matches with the db username and db password
-            if (fromstation == get_db_from_station and tostation == get_db_to_station):
-                pass
-            else:
-                flash('No trains exists between from and to stations')
-                pass
-        except AttributeError:
-            flash('No train information exists')
     return render_template('reservation_app/index.html',form=form)
 
-@reservation_app.route("/passenger", defaults={'value':0})
+
 @reservation_app.route("/passenger/<int:value>", methods=['GET','POST'])
 @login_required
 def passenger(value):
 
-    form = PassengerForm(request.form)
+    form = PassengerForm()
 
     if form.validate_on_submit():
         passengername = form.passengername.data

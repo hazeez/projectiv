@@ -195,7 +195,15 @@
                 },5000);
             }
             else{
-                var passenger_sex_speech_text = $("#passengersex").attr("speech-set-text") + ' ' + $("#passengersex").val();
+                  var male_female = passenger_sex_value;
+                  if (male_female == "m"){
+                      male_female = "Male";
+                  }
+                  else {
+                      male_female = "Female";
+                  }
+                  console.log(male_female);
+                var passenger_sex_speech_text = $("#passengersex").attr("speech-set-text") + ' ' + male_female;
                 readOutLoud(passenger_sex_speech_text);
               }
         } // end of if down_key_presses = 3
@@ -226,9 +234,9 @@
         } // end of if down_key_presses = 0
 
 
-        console.log("name given is: " + passngenger_name_value);
-        console.log("age given is : " + _passenger_age_value);
-        console.log("sex given is : " + _passenger_sex_value);
+        console.log("name given is: " + passenger_name_value);
+        console.log("age given is : " + passenger_age_value);
+        console.log("sex given is : " + passenger_sex_value);
         console.log("preference given is : " + passenger_preference_value);
         console.log('down_key_pressed:' + down_key_presses);
     }

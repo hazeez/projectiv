@@ -46,7 +46,6 @@
       // event is a SpeechRecognitionEvent object.
       // It holds all the lines we have captured so far.
       // We only need the current one.
-      //var current = event.resultIndex;
         var current = event.results.length - 1;
 
       // Get a transcript of what was said.
@@ -62,17 +61,7 @@
           $("#tostation").val(transcript);
           readOutLoud('Thank you. Press down arrow key to proceed');
       }
-      //return transcript;
 
-      // // Add the current transcript to the contents of our Note.
-      // // There is a weird bug on mobile, where everything is repeated twice.
-      // // There is no official solution so far so we have to handle an edge case.
-      // var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
-      //
-      // if(!mobileRepeatBug) {
-      //   noteContent += transcript;
-      //   noteTextarea.val(noteContent);
-      // }
     };
 
 
@@ -172,7 +161,7 @@
         } // end of if down_key_presses = 2
 
         if (down_key_presses_mod == 0) {
-            $("#submit").focus();
+            $("#btn-submit").focus();
             readOutLoud("Press Down arrow key to verify the provided source and destination stations");
             readOutLoud("or else press enter key to display the trains between source and destination station")
 
@@ -186,9 +175,73 @@
     }
 
 
-});
 
-});
+    // $("#btn-submit").click(function(){
+    //    // alert("Clicked Submit");
+    //     var tostation_value = $("#tostation").val();
+    //     var fromstation_value = $("#fromstation").val();
+    //     $.post('/reservation/index',
+    //         {
+    //             fromstation:fromstation_value,
+    //             tostation:tostation_value
+    //         },
+    //         function(data){
+    //             console.log(data.message);
+    //         });
+    //     return false;
+    // });
+
+}); // end of body key down function
+
+
+        var table_element = "";
+
+        $('#form-journey').on('submit',function(e){
+        e.preventDefault();
+        // var tostation_value = $("#tostation").val();
+        // var fromstation_value = $("#fromstation").val();
+        frm_serialized = $(this).serialize();
+
+
+        $.ajax({
+                url: "/reservation/index",
+                method: "POST",
+                data : frm_serialized,
+                success: function(data) {
+                    table_element = "<table class='table table-striped'>" +
+                        "<thead><tr>" +
+                          "<th scope='col'>S.No</th>" +
+                          "<th scope='col'>Train Number</th>" +
+                          "<th scope='col'>Train Name</th>" +
+                          "<th scope='col'>Availability</th>" +
+                          "<th scope='col'>From Station</th>" +
+                          "<th scope='col'>From Station</th>" +
+                            "<th scope='col'>Action</th>" +
+                        "</tr>" +
+                        "</thead>" +
+                        "<tbody>";
+
+
+                    for (var i=0;i<data.trains.length; i++){
+                        var j = i+1;
+                    table_element += "<tr> <th scope='row'>" + j + "</th>" +
+                        "<td>" + data.trains[i].trainnumber + "</td>" +
+                        "<td>" + data.trains[i].trainname + "</td>" +
+                        "<td>" + data.trains[i].availability + "</td>" +
+                        "<td>" + data.trains[i].fromstation + "</td>" +
+                        "<td>" + data.trains[i].tostation + "</td>" +
+                        "<td> <input class='btn btn-primary' id='"+ data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='"+ data.trains[i].availability +"'> </td></tr>";
+                    }
+                    table_element += "</tbody></table>";
+                    // noinspection JSAnnotator
+                    document.getElementById("train-details-div").innerHTML = table_element;
+
+                } // success function ends here
+        }); // end of ajax
+
+   }); // end of btn submit
+
+}); // end of document ready
 
 
 
