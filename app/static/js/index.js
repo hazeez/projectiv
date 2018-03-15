@@ -215,7 +215,7 @@
                           "<th scope='col'>Train Name</th>" +
                           "<th scope='col'>Availability</th>" +
                           "<th scope='col'>From Station</th>" +
-                          "<th scope='col'>From Station</th>" +
+                          "<th scope='col'>To Station</th>" +
                             "<th scope='col'>Action</th>" +
                         "</tr>" +
                         "</thead>" +
