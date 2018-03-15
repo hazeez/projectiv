@@ -62,6 +62,7 @@
           $("#password").val(transcript);
           readOutLoud('Thank you. Press down arrow key to proceed');
       }
+
       //return transcript;
 
       // // Add the current transcript to the contents of our Note.
@@ -134,6 +135,7 @@
 
         var password_value = $("#password").val();
         var username_value = $("#username").val();
+        var submit_value = $("#submit").val();
 
         down_key_presses_mod = down_key_presses % 3;
 
@@ -171,21 +173,12 @@
               }
         } // end of if down_key_presses = 2
 
-        if (down_key_presses_mod == 3) {
-            $("#password").focus();
-              if (!password_value) {
-                var password_speech_text = $("#password").attr("speech-unset-text");
-                readOutLoud(password_speech_text);
-                setTimeout(function(){
-                    recognition.start();
-                    console.log("speech recognition started");
-                },2000);
-            }
-            else{
-                var password_speech_text = "Password is set";
-                readOutLoud(password_speech_text);
-              }
-        } // end of if down_key_presses = 2
+        if (down_key_presses_mod == 0) {
+            $("#submit").focus();
+            readOutLoud("Press downkey to verify the provided user credentials")
+            readOutLoud("or else press enter key to proceed with the next page")
+
+        } // end of if down_key_presses = 3
 
         console.log("password given is: " + password_value);
         console.log("username given is : " + username_value);

@@ -146,7 +146,7 @@
                     recognition.start();
                     playbeepsound();
                     console.log("speech recognition started");
-                },3000);
+                },4000);
             }
             else{
                 var fromstation_speech_text = $("#fromstation").attr("speech-set-text") + ' ' + $("#fromstation").val();
@@ -163,13 +163,22 @@
                     recognition.start();
                     playbeepsound();
                     console.log("speech recognition started");
-                },3000);
+                },4000);
             }
             else{
                 var tostation_speech_text = $("#tostation").attr("speech-set-text") + ' ' + $("#tostation").val();
                 readOutLoud(tostation_speech_text);
               }
         } // end of if down_key_presses = 2
+
+        if (down_key_presses_mod == 0) {
+            $("#submit").focus();
+            readOutLoud("Press Down arrow key to verify the provided source and destination stations");
+            readOutLoud("or else press enter key to display the trains between source and destination station")
+
+
+        } // end of if down_key_presses = 3
+
 
         console.log("from station given is: " + fromstation_value);
         console.log("to station given is : " + tostation_value);
