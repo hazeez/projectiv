@@ -1,0 +1,53 @@
+{% extends "reservation_app/base.html" %}
+
+{% block content %}
+    <style>#login-div{margin-top: 100px}</style>
+    <div class="main-container offset-md-4 col-md-4" id="Passenger-div">
+        <h1>RSVC App</h1><br><br>
+        <h2>Passenger Details</h2>
+        <form action="" method="post">
+
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
+
+
+            {{  form.hidden_tag() }}
+            <p>
+                {{ form.passengername.label }}<br>
+                {{ form.passengername(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please Provide Passenger Name', 'speech-set-text':'Passenger Name provided is'}) }}
+                {% for error in form.passengername.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.passengerage.label }}<br>
+                {{ form.passengerage(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please Provide Passenger Age', 'speech-set-text':'Passenger Age provided is'}) }}
+                {% for error in form.passengerage.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.passengersex.label }}<br>
+                {{ form.passengersex(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please Provide gender as M for male or F for Female', 'speech-set-text':'Passenger Sex provided is'}) }}
+                {% for error in form.passengersex.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.passengerpreference.label }}<br>
+                {{ form.passengerpreference(size=32, **{'class':'form-control form-control-lg',  'speech':'yes', 'speech-unset-text':'Please provide Passenger birth preference', 'speech-set-text':'Passenger birth preference provided is'}) }}
+                {% for error in form.passengerpreference.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
+        </form>
+    </div>
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="../../static/js/passenger.js"></script>
+{% endblock scripts %}

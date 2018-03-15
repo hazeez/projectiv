@@ -9,7 +9,7 @@ from app import app, db, login
 
 
 #import module forms
-from app.reservation_app.forms import LoginForm, StationsForm
+from app.reservation_app.forms import LoginForm, StationsForm, PassengerForm
 
 #import models
 from app.reservation_app.models import Users
@@ -64,6 +64,7 @@ def login():
             flash('Invalid username or password')
     return render_template('reservation_app/login.html',form=form)
 
+
 @reservation_app.route("/index", defaults={'value':0})
 @reservation_app.route("/index/<int:value>", methods=['GET','POST'])
 @login_required
@@ -97,6 +98,30 @@ def index(value):
         except AttributeError:
             flash('No train information exists')
     return render_template('reservation_app/index.html',form=form)
+
+@reservation_app.route("/passenger", defaults={'value':0})
+@reservation_app.route("/passenger/<int:value>", methods=['GET','POST'])
+@login_required
+def passenger(value):
+
+    form = PassengerForm(request.form)
+
+    if form.validate_on_submit():
+        passengername = form.passengername.data
+        passengerage = form.passengerage.data
+        passengersex = form.passsengersex.data
+        passengerpreference = form.passengerpreference.data
+        passengername = passengername.upper()
+        passengersex = passengersex.upper()
+        passengerpreference = passengerpreference.upper()
+
+        if passengername is None or passengerage is None or passengersex is None or passengerpreference is None:
+            flash('Please provide Passenger Booking Details')
+            return redirect(url_for('reservation.passenger'))
+        else:
+            flash('Booking Successful')
+
+    return render_template('reservation_app/passenger.html',form=form)
 
 
 @reservation_app.route('/logout')

@@ -21,3 +21,12 @@ class StationsForm(Form):
     fromstation = StringField('From Station', validators=[DataRequired()])
     tostation = StringField('To Station', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+# Define passenger form
+
+class PassengerForm(Form):
+    passengername = StringField('Name', validators= [DataRequired()] )
+    passengerage = StringField('Age', validators=[DataRequired()])
+    passengersex = StringField('Sex', validators=[DataRequired()])
+    passengerpreference = StringField('Preference', validators=[DataRequired()])
+    submit = SubmitField('Book Ticket')
