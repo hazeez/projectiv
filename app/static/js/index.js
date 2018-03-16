@@ -39,6 +39,8 @@
     // we will be triggering the start and stop of speech recognition using the down arrow key
     // hence, the following variable
     var down_key_presses = 0;
+    var right_key_presses = -1;
+
 
     // This block is called every time the Speech APi captures a line.
     recognition.onresult = function(event) {
@@ -112,8 +114,15 @@
         }, 11000);
 
         var down_key_presses_mod = 0;
+        var right_key_presses_mod = 0;
+        var right_key_divisor;
+
 
         $('body').keydown(function(e) {
+
+            //declare global variables
+
+
     if (e.keyCode==40) {
 
         e.preventDefault();
@@ -174,6 +183,38 @@
         console.log('down_key_pressed:' + down_key_presses);
     }
 
+    if (e.keyCode == 39){
+
+        e.preventDefault();
+        right_key_presses += 1;
+
+        right_key_presses_mod = right_key_presses % right_key_divisor;
+
+        for(var i=0; i<right_key_divisor;i++){
+            if (right_key_presses_mod == i) {
+            var elementid = '#'+i;
+            $(elementid).focus();
+            var thistrainname = $(elementid).attr('trainname');
+            var thisavailability = $(elementid).attr('availability');
+            if (thisavailability.toLowerCase() == "yes"){
+                var readmessage = "Ticket is available in " + thistrainname;
+                var readmessage1 = "Hit Enter to book the ticket in "+ thistrainname;
+                var readmessage2 = "Or else, press right arrow key to see next available trains";
+                readOutLoud(readmessage);
+                readOutLoud(readmessage1);
+                readOutLoud(readmessage2);
+            }
+            else {
+                var readmessage = 'Ticket is not available in ' + thistrainname;
+                var readmessage1 = "press right arrow key to see next available trains";
+                readOutLoud(readmessage);
+                readOutLoud(readmessage1);
+            } // end of if else statement
+
+        } // end of if construct right key presses mod
+        } // end of for loop
+
+    } // end of key code 39 if construct
 
 
     // $("#btn-submit").click(function(){
@@ -198,8 +239,8 @@
 
         $('#form-journey').on('submit',function(e){
         e.preventDefault();
-        // var tostation_value = $("#tostation").val();
-        // var fromstation_value = $("#fromstation").val();
+        var tostation_value = $("#tostation").val();
+        var fromstation_value = $("#fromstation").val();
         frm_serialized = $(this).serialize();
 
 
@@ -208,33 +249,52 @@
                 method: "POST",
                 data : frm_serialized,
                 success: function(data) {
+                    if (data.trains.length == 0) {
+                        var readmessage = 'There are no trains running between ' + fromstation_value  + ' and ' + tostation_value;
+                        var readmessage1 = "Press down key to try again!";
+                        readOutLoud(readmessage);
+                        readOutLoud(readmessage1);
+                        $('#fromstation').val("");
+                        $('#tostation').val("");
+                    }
+                    else{
+
+                    right_key_divisor = data.trains.length;
+                    console.log(right_key_presses_mod);
+
                     table_element = "<table class='table table-striped'>" +
                         "<thead><tr>" +
-                          "<th scope='col'>S.No</th>" +
-                          "<th scope='col'>Train Number</th>" +
-                          "<th scope='col'>Train Name</th>" +
-                          "<th scope='col'>Availability</th>" +
-                          "<th scope='col'>From Station</th>" +
-                          "<th scope='col'>To Station</th>" +
-                            "<th scope='col'>Action</th>" +
+                        "<th scope='col'>S.No</th>" +
+                        "<th scope='col'>Train Number</th>" +
+                        "<th scope='col'>Train Name</th>" +
+                        "<th scope='col'>Availability</th>" +
+                        "<th scope='col'>From Station</th>" +
+                        "<th scope='col'>To Station</th>" +
+                        "<th scope='col'>Action</th>" +
                         "</tr>" +
                         "</thead>" +
                         "<tbody>";
 
 
-                    for (var i=0;i<data.trains.length; i++){
-                        var j = i+1;
-                    table_element += "<tr> <th scope='row'>" + j + "</th>" +
-                        "<td>" + data.trains[i].trainnumber + "</td>" +
-                        "<td>" + data.trains[i].trainname + "</td>" +
-                        "<td>" + data.trains[i].availability + "</td>" +
-                        "<td>" + data.trains[i].fromstation + "</td>" +
-                        "<td>" + data.trains[i].tostation + "</td>" +
-                        "<td> <input class='btn btn-primary' id='"+ data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='"+ data.trains[i].availability +"'> </td></tr>";
+                    for (var i = 0; i < data.trains.length; i++) {
+                        var j = i + 1;
+                        table_element += "<tr> <th scope='row'>" + j + "</th>" +
+                            "<td>" + data.trains[i].trainnumber + "</td>" +
+                            "<td>" + data.trains[i].trainname + "</td>" +
+                            "<td>" + data.trains[i].availability + "</td>" +
+                            "<td>" + data.trains[i].fromstation + "</td>" +
+                            "<td>" + data.trains[i].tostation + "</td>" +
+                            "<td> <input class='btn btn-primary'id='" + i + "' dbid='" + data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "'> </td></tr>";
                     }
                     table_element += "</tbody></table>";
                     // noinspection JSAnnotator
                     document.getElementById("train-details-div").innerHTML = table_element;
+
+                    var readmessage = 'There are ' + data.trains.length + 'trains running between' + data.trains[0].fromstation + ' and ' + data.trains[0].tostation;
+                    var readmessage1 = 'Press right arrow key to check availability in these trains';
+                    readOutLoud(readmessage);
+                    readOutLoud(readmessage1);
+                } // end of else statement
 
                 } // success function ends here
         }); // end of ajax
