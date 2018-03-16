@@ -1,9 +1,10 @@
 {% extends "reservation_app/base.html" %}
 
 {% block content %}
-    <style>#login-div{margin-top: 100px}</style>
-    <div class="main-container offset-md-4 col-md-4" id="Passenger-div">
-        <h1>RSVC App</h1><br><br>
+    {% include "reservation_app/partials/navbar.html" %}
+    <style>#passenger-div{margin-top: 20px}</style>
+    <div class="main-container offset-md-1 col-md-3" id="passenger-div">
+
         <h2>Passenger Details</h2>
         <form action="" method="post">
 

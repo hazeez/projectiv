@@ -200,15 +200,19 @@
                 var readmessage = "Ticket is available in " + thistrainname;
                 var readmessage1 = "Hit Enter to book the ticket in "+ thistrainname;
                 var readmessage2 = "Or else, press right arrow key to see next available trains";
-                readOutLoud(readmessage);
-                readOutLoud(readmessage1);
-                readOutLoud(readmessage2);
+                    readOutLoud(readmessage);
+                    readOutLoud(readmessage1);
+                    readOutLoud(readmessage2);
+
+
+
             }
             else {
                 var readmessage = 'Ticket is not available in ' + thistrainname;
                 var readmessage1 = "press right arrow key to see next available trains";
                 readOutLoud(readmessage);
                 readOutLoud(readmessage1);
+
             } // end of if else statement
 
         } // end of if construct right key presses mod
@@ -284,7 +288,8 @@
                             "<td>" + data.trains[i].availability + "</td>" +
                             "<td>" + data.trains[i].fromstation + "</td>" +
                             "<td>" + data.trains[i].tostation + "</td>" +
-                            "<td> <input class='btn btn-primary'id='" + i + "' dbid='" + data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "'> </td></tr>";
+                            "<td> <a class='btn btn-primary' id='"+ i + "' dbid='" + data.trains[i].id + "' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "' href='/reservation/passenger/" + data.trains[i].id + "'> Book Ticket</a></td></tr>";
+                            // "<td> <input class='btn btn-primary'id='" + i + "' dbid='" + data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "'> </td></tr>";
                     }
                     table_element += "</tbody></table>";
                     // noinspection JSAnnotator

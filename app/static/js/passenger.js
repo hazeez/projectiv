@@ -234,11 +234,20 @@
         } // end of if down_key_presses = 0
 
 
+
+
         console.log("name given is: " + passenger_name_value);
         console.log("age given is : " + passenger_age_value);
         console.log("sex given is : " + passenger_sex_value);
         console.log("preference given is : " + passenger_preference_value);
         console.log('down_key_pressed:' + down_key_presses);
+    }
+
+    if (e.keyCode==39)
+    {
+        e.preventDefault();
+        $("#logout").focus();
+        readOutLoud('hit enter to logout and redirect to sign in page');
     }
 
 
