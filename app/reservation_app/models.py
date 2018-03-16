@@ -59,8 +59,7 @@ class Passengers(db.Model):
     passengerpreference = db.Column(db.String(64))
 
 # new instance instantiation procedure
-    def __init__(self, id,trainnumber,trainname,availablity,fromstation,tostation):
-        self.id = id
+    def __init__(self, passengername,passengerage,passengersex,passengerpreference):
         self.passengername = passengername
         self.passengerage = passengerage
         self.passengersex = passengersex

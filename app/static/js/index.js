@@ -288,7 +288,7 @@
                             "<td>" + data.trains[i].availability + "</td>" +
                             "<td>" + data.trains[i].fromstation + "</td>" +
                             "<td>" + data.trains[i].tostation + "</td>" +
-                            "<td> <a class='btn btn-primary' id='"+ i + "' dbid='" + data.trains[i].id + "' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "' href='/reservation/passenger/" + data.trains[i].id + "'> Book Ticket</a></td></tr>";
+                            "<td> <a type='button' class='btn btn-primary' id='"+ i + "' dbid='" + data.trains[i].id + "' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "' href='/reservation/passenger/" + data.trains[i].id + "'> Book Ticket</a></td></tr>";
                             // "<td> <input class='btn btn-primary'id='" + i + "' dbid='" + data.trains[i].id + "' type='submit' value='Book ticket' trainname='" + data.trains[i].trainname + "' availability='" + data.trains[i].availability + "'> </td></tr>";
                     }
                     table_element += "</tbody></table>";

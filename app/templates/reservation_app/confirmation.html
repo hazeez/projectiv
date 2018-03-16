@@ -1,0 +1,18 @@
+{% extends "reservation_app/base.html" %}
+
+{% block content %}
+    {% include "reservation_app/partials/navbar.html" %}
+    <style>#confirmation-div{margin-top: 100px}</style>
+    <div class="main-container offset-md-4 col-md-4 alert alert-primary" id="confirmation-div" trainname='{{ message }}'>
+
+        <h2>You have successfully booked the ticket in : {{ message }} </h2>
+
+    </div>
+{% endblock %}
+
+
+
+{% block scripts %}
+
+    <script src="../../static/js/confirmation.js"></script>
+{% endblock scripts %}

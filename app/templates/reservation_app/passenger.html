@@ -3,7 +3,9 @@
 {% block content %}
     {% include "reservation_app/partials/navbar.html" %}
     <style>#passenger-div{margin-top: 20px}</style>
-    <div class="main-container offset-md-1 col-md-3" id="passenger-div">
+    <style>#bookedtrain-div{margin-top:100px}</style>
+    <div class="row">
+        <div class="main-container offset-md-1 col-md-4" id="passenger-div">
 
         <h2>Passenger Details</h2>
         <form action="" method="post">
@@ -45,6 +47,23 @@
             <p>{{ form.submit(**{'class':'btn btn-lg btn-primary'}) }}</p>
         </form>
     </div>
+        <div class="main-container offset-md-1 col-md-3" id="bookedtrain-div">
+            <div class="alert alert-primary">
+                <h3> Train Number : {{ trainnumber }} </h3>
+            </div>
+            <div class="alert alert-info">
+               <h3> Train Name : {{ trainname }} </h3>
+            </div>
+             <div class="alert alert-primary">
+                <h3> Boarding Station : {{ fromstation }} </h3>
+             </div>
+            <div class="alert alert-info">
+               <h3>  To Station : {{ tostation }} </> </h3>
+            </div>
+
+        </div>
+    </div>
+
 {% endblock %}
 
 

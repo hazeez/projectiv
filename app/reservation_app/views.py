@@ -12,7 +12,7 @@ from app import app, db
 from app.reservation_app.forms import LoginForm, StationsForm, PassengerForm
 
 #import models
-from app.reservation_app.models import Users, Trains
+from app.reservation_app.models import Users, Trains, Passengers
 
 #Define the blueprint
 reservation_app = Blueprint('reservation', __name__, url_prefix='/reservation')
@@ -90,22 +90,38 @@ def passenger(value):
 
     form = PassengerForm()
 
+    selectedtrain = Trains.query.filter_by(id=value).first()
+
+    trainnumber = selectedtrain.trainnumber
+    trainname = selectedtrain.trainname
+    fromstation = selectedtrain.fromstation
+    tostation = selectedtrain.tostation
+    print(trainname)
+
     if form.validate_on_submit():
         passengername = form.passengername.data
         passengerage = form.passengerage.data
-        passengersex = form.passsengersex.data
+        passengersex = form.passengersex.data
         passengerpreference = form.passengerpreference.data
         passengername = passengername.upper()
         passengersex = passengersex.upper()
         passengerpreference = passengerpreference.upper()
 
-        if passengername is None or passengerage is None or passengersex is None or passengerpreference is None:
-            flash('Please provide Passenger Booking Details')
-            return redirect(url_for('reservation.passenger'))
-        else:
-            flash('Booking Successful')
+        new_passenger = Passengers(passengername=passengername,passengerage=passengerage,passengersex=passengersex,passengerpreference=passengerpreference)
+        db.session.add(new_passenger)
+        db.session.commit()
+        return render_template('reservation_app/confirmation.html', message=trainname)
 
-    return render_template('reservation_app/passenger.html',form=form)
+
+    return render_template('reservation_app/passenger.html',form=form,trainnumber=trainnumber,trainname=trainname,fromstation=fromstation,tostation=tostation)
+
+
+@reservation_app.route("/confirmation", methods=['GET','POST'])
+@login_required
+def confirmation():
+    return render_template('reservation_app/confirmation.html')
+
+
 
 
 @reservation_app.route('/logout')

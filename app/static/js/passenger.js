@@ -243,13 +243,6 @@
         console.log('down_key_pressed:' + down_key_presses);
     }
 
-    if (e.keyCode==39)
-    {
-        e.preventDefault();
-        $("#logout").focus();
-        readOutLoud('hit enter to logout and redirect to sign in page');
-    }
-
 
 });
 
